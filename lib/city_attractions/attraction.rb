@@ -9,6 +9,10 @@ class CityAttractions::Attraction
   	save
   end
 
+  def self.all
+  	@@attractions
+  end
+
   def save
   	@@attractions << self
   end
