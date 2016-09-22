@@ -1,5 +1,5 @@
 class CityAttractions::Scraper
-  BASE = "http://www.aviewoncities.com/_attractions.htm"
+  BASE = "http://www.aviewoncities.com/"
   def self.scrape_cities
     doc = Nokogiri::HTML(open("http://www.aviewoncities.com/_attractions.htm"))
     td_tags = doc.search('#indexdata tr')[1].search('td')[2..4]
@@ -15,4 +15,13 @@ class CityAttractions::Scraper
       end
     end
   end
-end
+
+  def self.scrape_attractions(city)
+    attractions = "#{BASE + city.url}"
+    doc = Nokogiri::HTML(open(attractions))
+    doc.search("ul")[2].children.search('a').collect do |attr|
+      city.attractions << CityAttractions::Attraction.new(attr.text, attr.values.first)
+    end
+    city.attractions
+  end
+end 
