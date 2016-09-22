@@ -24,4 +24,12 @@ class CityAttractions::Scraper
     end
     city.attractions
   end
+
+  def self.scrape_info(attraction)
+    info = "#{BASE + attraction.url}"
+    doc = Nokogiri::HTML(open(info))
+    doc.search('#data').search('.article').collect do |info|
+      info.text
+    end
+  end
 end 
